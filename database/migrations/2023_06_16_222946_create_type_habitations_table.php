@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('type_habitations', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('description')->nullable();
             $table->integer('price')->nullable();
-            $table->string('images')->nullable();
+            $table->string('images',10000)->nullable();
             $table->boolean('status')->default(true);
             $table->timestamps();
         });

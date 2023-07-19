@@ -27,6 +27,7 @@ Route::post('login', [AuthController::class, 'login']);
 Route::get('typehabitations-public', [TypeHabitationController::class, 'index']);
 Route::get('typeservices-public', [TypeServiceController::class, 'index']);
 Route::get('events-public', [EventController::class, 'index']);
+Route::get('spaces-public', [SpaceController::class, 'index']);
 
 Route::group(['middleware' => ['auth:sanctum']], function(){
 

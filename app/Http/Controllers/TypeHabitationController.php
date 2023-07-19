@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Type_habitation;
+use App\Models\TypeHabitation;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -14,9 +14,27 @@ class TypeHabitationController extends Controller
     public function index()
     {
         //
-        $type_habitations = Type_habitation::all();
+        $typehabitations = TypeHabitation::all();
 
-        return response()->json($type_habitations);
+        $array = [];
+
+        foreach ($typehabitations as $typehabitation) {
+
+            $images = explode( ',', $typehabitation->images);
+
+            $array[] = [
+                "id" => $typehabitation->id,
+                "name" => $typehabitation->name,
+                "description" => $typehabitation->description,
+                "price" => $typehabitation->price,
+                "images" => $images,
+                "status" => $typehabitation->status,
+                "created_at" => $typehabitation->created_at,
+                "updated_at" => $typehabitation->updated_at
+            ];
+        }
+
+        return response()->json($array);
     }
 
     /**
@@ -33,16 +51,26 @@ class TypeHabitationController extends Controller
     public function store(Request $request)
     {
         //
-        $type_habitation = new Type_habitation;
+        $typehabitation = new TypeHabitation;
 
-        $type_habitation->name = $request->name;
-        $type_habitation->price = $request->price;
-        $type_habitation->images = $request->images;
-        $type_habitation->save();
+        //image typeahbitation
+        if ($request->hasFile('images')){
+            $file = $request->file('images');
+            $destinationPath = 'img/habitations/types/';
+            $filename = time() . '-' . $file->getClientOriginalName();
+            $uploadSuccess = $request->file('images')->move($destinationPath, $filename);
+            $typehabitation->images = $destinationPath . $filename;
+        }
+
+        $typehabitation->name = $request->name;
+        $typehabitation->description = $request->description;
+        $typehabitation->price = $request->price;
+        
+        $typehabitation->save();
 
         $data = [
             "message" => "Tipo de habitación creado con exito",
-            "type_habitation" => $type_habitation
+            "typehabitation" => $typehabitation
         ];
 
         return response()->json($data);
@@ -51,17 +79,31 @@ class TypeHabitationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(type_habitation $type_habitation)
+    public function show(TypeHabitation $typehabitation)
     {
         //
 
-        return response()->json($type_habitation);
+        
+        $images = explode( ',', $typehabitation->images);
+
+        $data = [
+            "id" => $typehabitation->id,
+            "name" => $typehabitation->name,
+            "description" => $typehabitation->description,
+            "price" => $typehabitation->price,
+            "images" => $images,
+            "status" => $typehabitation->status,
+            "created_at" => $typehabitation->created_at,
+            "updated_at" => $typehabitation->updated_at
+        ];
+
+        return response()->json($data);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(type_habitation $type_habitation)
+    public function edit(TypeHabitation $typehabitation)
     {
         //
     }
@@ -69,17 +111,18 @@ class TypeHabitationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, type_habitation $type_habitation)
+    public function update(Request $request, TypeHabitation $typehabitation)
     {
         //
-        $type_habitation->name = $request->name;
-        $type_habitation->price = $request->price;
-        $type_habitation->images = $request->images;
-        $type_habitation->save();
+        $typehabitation->name = $request->name;
+        $typehabitation->description = $request->description;
+        $typehabitation->price = $request->price;
+        $typehabitation->images = $request->images;
+        $typehabitation->save();
 
         $data = [
             "message" => "Tipo de habitación actualizada con exito",
-            "type_habitation" => $type_habitation
+            "typehabitation" => $typehabitation
         ];
 
         return response()->json($data);
@@ -88,14 +131,14 @@ class TypeHabitationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(type_habitation $type_habitation)
+    public function destroy(TypeHabitation $typehabitation)
     {
         //
-        $type_habitation->delete();
+        $typehabitation->delete();
 
         $data = [
             "message" => "Tipo de habitación eliminado con exito",
-            "type_habitation" => $type_habitation
+            "typehabitation" => $typehabitation
         ];
 
         return response()->json($data);

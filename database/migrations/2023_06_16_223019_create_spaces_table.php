@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('spaces', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('description')->nullable();
             $table->integer('size')->nullable();
             $table->integer('amount')->nullable();
-            $table->string('images')->nullable();
+            $table->string('images', 10000)->nullable();
             $table->boolean('status')->default(true);
             $table->timestamps();
         });
