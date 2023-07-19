@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('description')->nullable();
             $table->integer('price')->nullable();
-            $table->string('images')->nullable();
-            $table->boolean('public')->default(true);
+            $table->string('images', 10000 )->nullable();
+            $table->boolean('show')->default(true);
             $table->boolean('status')->default(true);
             $table->timestamps();
         });

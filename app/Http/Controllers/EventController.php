@@ -19,12 +19,12 @@ class EventController extends Controller
         $array = [];
 
         foreach ($events as $event) {
+                                    
             $array[] = [
                 "id" => $event->id,
-                "id_type_event" => $event->id_type_event,
-                "id_space" => $event->id_space,
-                "service_id" => $event->service_id,
-                "tickets" => $event->tickets,
+                "type" => $event->type,
+                "space" => $event->space,
+                "service_id" => $event->service_id,                
                 "name" => $event->name,
                 "date" => $event->date,
                 "price" => $event->price,
@@ -34,9 +34,10 @@ class EventController extends Controller
                 "created_at" => $event->created_at,
                 "updated_at" => $event->updated_at
             ];
+
         }
 
-        return response()->json($events);
+        return response()->json($array);
     }
 
     /**
@@ -53,6 +54,16 @@ class EventController extends Controller
     public function store(Request $request)
     {
         //
+
+        //image service
+        if ($request->hasFile('avatar')){
+            $file = $request->file('avatar');
+            $destinationPath = 'images/services/events/';
+            $filename = time() . '-' . $file->getClientOriginalName();
+            $uploadSuccess = $request->file('avatar')->move($destinationPath, $filename);
+            $event->avatar = $destinationPath . $filename;
+        }
+
         $event = new Event;
         $event->id_type_event = $request->id_type_event;
         $event->id_space = $request->id_space;
@@ -61,7 +72,7 @@ class EventController extends Controller
         $event->date = $request->date;
         $event->price = $request->price;
         $event->amount = $request->amount;
-        $event->avatar = $request->avatar;
+        
         $event->save();
 
         $data = [
@@ -77,11 +88,25 @@ class EventController extends Controller
      */
     public function show(Event $event)
     {
-        //
+        //        
         $data = [
             "message" => "Evento detail",
-            "event" => $event,
-            "tickets" => $event->tickets
+            "event" => [
+                "id" => $event->id,
+                "type" => $event->type,
+                "space" => $event->space,
+                "service_id" => $event->service_id,
+                "tickets" => $event->tickets,
+                "name" => $event->name,
+                "date" => $event->date,
+                "price" => $event->price,
+                "amount" => $event->amount,
+                "avatar" => $event->avatar,
+                "status" => $event->status,
+                "created_at" => $event->created_at,
+                "updated_at" => $event->updated_at
+            ]
+            
         ];
         
         return response()->json($data);

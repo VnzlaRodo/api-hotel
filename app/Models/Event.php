@@ -19,4 +19,14 @@ class Event extends Model
         return $this->belongsTo(Service::class);
     }
 
+    public function type()
+    {
+        return $this->belongsTo(TypeEvent::class, 'id_type_event');
+    }
+
+    public function space()
+    {
+        return $this->belongsTo(Space::class, 'id_space');
+    }
+
 }

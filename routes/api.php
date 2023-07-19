@@ -26,6 +26,7 @@ Route::post('login', [AuthController::class, 'login']);
 //endpoint publicos
 Route::get('typehabitations-public', [TypeHabitationController::class, 'index']);
 Route::get('typeservices-public', [TypeServiceController::class, 'index']);
+Route::get('events-public', [EventController::class, 'index']);
 
 Route::group(['middleware' => ['auth:sanctum']], function(){
 
