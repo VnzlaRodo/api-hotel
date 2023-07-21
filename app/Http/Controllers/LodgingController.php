@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Lodging;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class LodgingController extends Controller
 {
@@ -129,6 +130,14 @@ class LodgingController extends Controller
         ];
 
         return response()->json($data);
+    }
+
+    public function forRange( Request $request){
+
+        //$lodging = Lodging::whereDate('checkin', '<=', $request->checkin)->get();
+        //$lodging = Carbon::now();
+        DB::select('Select * from lodgings as m! where m.checking >= :checking and m.checkout <= :checkout', [$request->checkin]);
+        return response()->json($lodging);
     }
 
 

@@ -17,6 +17,8 @@ use App\Http\Controllers\TypeExtraController;
 use App\Http\Controllers\ServiceExtraController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\WorkerController;
+use App\Http\Controllers\MessageServiceController;
+use App\Http\Controllers\MessageContactController;
 use App\Http\Controllers\api\AuthController;
 
 
@@ -28,6 +30,13 @@ Route::get('typehabitations-public', [TypeHabitationController::class, 'index'])
 Route::get('typeservices-public', [TypeServiceController::class, 'index']);
 Route::get('events-public', [EventController::class, 'index']);
 Route::get('spaces-public', [SpaceController::class, 'index']);
+
+//Consulta de habitaciones
+Route::post('lodgings/forrange', [LodgingController::class, 'forRange']);
+
+//Clientes envian mensaje
+Route::post('messageservices-public', [MessageServiceController::class, 'store']);
+Route::post('messageContacts-public', [MessageContactController::class, 'store']);
 
 Route::group(['middleware' => ['auth:sanctum']], function(){
 
@@ -146,5 +155,20 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('workers/{worker}', [WorkerController::class, 'show']);
     Route::put('workers/{worker}', [WorkerController::class, 'update']);
     Route::delete('workers/{worker}', [WorkerController::class, 'destroy']);
+
+    //Mensajes de clientes
+    Route::get('messageservices', [MessageServiceController::class, 'index']);
+    Route::post('messageservices', [MessageServiceController::class, 'store']);
+    Route::get('messageservices/{messageService}', [MessageServiceController::class, 'show']);
+    Route::put('messageservices/{messageService}', [MessageServiceController::class, 'update']);
+    Route::delete('messageservices/{messageService}', [MessageServiceController::class, 'destroy']);
+
+    //Mensaje de contacto
+    Route::get('messageContacts', [MessageContactController::class, 'index']);
+    Route::post('messageContacts', [MessageContactController::class, 'store']);
+    Route::get('messageContacts/{messageContact}', [MessageContactController::class, 'show']);
+    Route::put('messageContacts/{messageContact}', [MessageContactController::class, 'update']);
+    Route::delete('messageContacts/{messageContact}', [MessageContactController::class, 'destroy']);
+
 });
 
