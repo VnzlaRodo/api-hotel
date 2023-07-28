@@ -92,6 +92,7 @@ class TypeHabitationController extends Controller
             "description" => $typehabitation->description,
             "price" => $typehabitation->price,
             "images" => $images,
+            "habitations" => $typehabitation->habitations,
             "status" => $typehabitation->status,
             "created_at" => $typehabitation->created_at,
             "updated_at" => $typehabitation->updated_at

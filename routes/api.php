@@ -30,6 +30,8 @@ Route::get('typehabitations-public', [TypeHabitationController::class, 'index'])
 Route::get('typeservices-public', [TypeServiceController::class, 'index']);
 Route::get('events-public', [EventController::class, 'index']);
 Route::get('spaces-public', [SpaceController::class, 'index']);
+Route::post('clients-public', [ClientController::class, 'store']);
+Route::post('lodgings-public', [LodgingController::class, 'storeClient']);
 
 //Consulta de habitaciones
 Route::post('lodgings/forrange', [LodgingController::class, 'forRange']);
@@ -38,6 +40,7 @@ Route::post('lodgings/forrange', [LodgingController::class, 'forRange']);
 Route::post('messageservices-public', [MessageServiceController::class, 'store']);
 Route::post('messageContacts-public', [MessageContactController::class, 'store']);
 
+//Usuarios logeados
 Route::group(['middleware' => ['auth:sanctum']], function(){
 
     Route::get('user-profile', [AuthController::class, 'userProfile']);

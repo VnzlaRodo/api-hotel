@@ -11,6 +11,11 @@ class Habitation extends Model
 
     public function lodging()
     {
-        return $this->belongsTo(Lodging::class,'id_lodging');
+        return $this->belongsTo(Lodging::class,'id');
+    }
+
+    public function type()
+    {
+        return $this->belongsTo(TypeHabitation::class,'id');
     }
 }

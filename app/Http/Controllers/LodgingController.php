@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Lodging;
+use App\Models\Habitation;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -106,6 +107,7 @@ class LodgingController extends Controller
         $lodging->adults = $request->adults;
         $lodging->children = $request->children;
         $lodging->price = $request->price;
+        $lodging->status = $request->status;
         $lodging->save();
 
         $data = [
@@ -132,12 +134,50 @@ class LodgingController extends Controller
         return response()->json($data);
     }
 
-    public function forRange( Request $request){
+    //Crear solicitud publica
+    public function storeClient(Request $request)
+    {
+        //
+        $lodging = new Lodging;
+        $lodging->id_client = $request->id_client;
+        $lodging->id_user = null;
+        $lodging->service_id = null;
+        $lodging->checkin = $request->checkin;
+        $lodging->checkout = $request->checkout;
+        $lodging->adults = $request->adults;
+        $lodging->children = $request->children;
+        $lodging->price = null;
+        $lodging->status = "pendiente";
+        $lodging->save();
 
-        //$lodging = Lodging::whereDate('checkin', '<=', $request->checkin)->get();
-        //$lodging = Carbon::now();
-        DB::select('Select * from lodgings as m! where m.checking >= :checking and m.checkout <= :checkout', [$request->checkin]);
-        return response()->json($lodging);
+        $data = [
+            "message" => "Hospedaje creado con exito",
+            "lodging" => $lodging
+        ];
+
+        return response()->json($data);
+    }
+
+    public function forRange( Request $request){
+        
+        
+        //Encontrando hospedajes que coninciden
+        $lodgings = Lodging::whereDate('checkin', '<=', Carbon::parse($request->checkin))
+                           //->whereTime('checkin', '<=', Carbon::parse($request->checkin)->toTimeString())
+                           ->whereDate('checkout', '>=', Carbon::parse($request->checkout))                   
+                           ->get();
+        
+        $habitations_occupied = [];
+        foreach ($lodgings as $lodging) {
+            foreach ($lodging->habitations as $habitations) {
+                $habitations_occupied[] = $habitations->id;
+            }
+        }
+         
+        $habitations_available = Habitation::whereNotIn('id', $habitations_occupied)
+        ->get();
+
+        return response()->json($habitations_available);
     }
 
 

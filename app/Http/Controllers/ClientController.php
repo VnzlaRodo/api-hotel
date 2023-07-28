@@ -35,6 +35,7 @@ class ClientController extends Controller
 
             $array[] = [
                 "id" => $client->id,
+                "cedula" => $client->cedula,
                 "name" => $client->name,
                 "lastname" => $client->lastname,
                 "email" => $client->email,
@@ -66,12 +67,24 @@ class ClientController extends Controller
     {
         //
         $client = new Client;
+
+         //avatar client
+         if ($request->hasFile('avatar')){
+            $file = $request->file('avatar');
+            $destinationPath = 'img/clients/';
+            $filename = time() . '-' . $file->getClientOriginalName();
+            $uploadSuccess = $request->file('avatar')->move($destinationPath, $filename);
+            $client->avatar = $destinationPath . $filename;
+        }
+
+
+        $client->cedula = $request->cedula;
         $client->name = $request->name;
         $client->lastname = $request->lastname;
         $client->email = $request->email;
         $client->phone = $request->phone;
         $client->address = $request->address;
-        $client->avatar = $request->avatar;
+        
         $client->save();
 
         $data = [
@@ -105,6 +118,7 @@ class ClientController extends Controller
             'message' => 'Client details',
             'client' => [
                 "id" => $client->id,
+                "cedula" => $client->cedula,
                 "name" =>$client->name,
                 "lastname" => $client->lastname,
                 "email" => $client->email,
@@ -134,13 +148,24 @@ class ClientController extends Controller
      */
     public function update(Request $request, Client $client)
     {
-        //        
+        //    
+        
+         //avatar client
+         if ($request->hasFile('avatar')){
+            $file = $request->file('avatar');
+            $destinationPath = 'img/clients/';
+            $filename = time() . '-' . $file->getClientOriginalName();
+            $uploadSuccess = $request->file('avatar')->move($destinationPath, $filename);
+            $client->avatar = $destinationPath . $filename;
+        }
+        
+        $client->cedula = $request->cedula;
         $client->name = $request->name;
         $client->lastname = $request->lastname;
         $client->email = $request->email;
         $client->phone = $request->phone;
         $client->address = $request->address;
-        $client->avatar = $request->avatar;
+        
         $client->save();
 
         $data = [

@@ -11,7 +11,7 @@ class Lodging extends Model
 
     public function habitations()
     {
-        return $this->hasMany(Habitation::class,'id');
+        return $this->hasMany(Habitation::class,'id_lodging');
     }
 
     public function service()

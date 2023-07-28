@@ -15,6 +15,24 @@ class HabitationController extends Controller
     {
         //
         $habitations = Habitation::all();
+
+        $array = [];
+
+        foreach ($habitations as $habitation) {
+            
+            $array[] = [
+                "id" => $habitation->id,
+                "id_type_habitation" => $habitation->type,
+                "id_lodging" => $habitation->lodging,
+                "number" => $habitation->number,
+                "adults" => $habitation->adults,
+                "children" => $habitation->children,
+                "description" => $habitation->description,
+                "status" => $habitation->status,
+                "created_at" => $habitation->created_at,
+                "updated_at" => $habitation->updated_at
+            ];
+        }
         
         return response()->json($habitations);
     }
@@ -58,7 +76,20 @@ class HabitationController extends Controller
     {
         //
 
-        return response()->json($habitation);
+        $data = [
+            "id" => $habitation->id,
+            "type" => $habitation->type,
+            "lodging" => $habitation->lodging,
+            "number" => $habitation->number,
+            "adults" => $habitation->adults,
+            "children" => $habitation->children,
+            "description" => $habitation->description,
+            "status" => $habitation->status,
+            "created_at" => $habitation->created_at,
+            "updated_at" => $habitation->updated_at
+        ];
+
+        return response()->json($data);
     }
 
     /**
@@ -76,7 +107,7 @@ class HabitationController extends Controller
     {
         //
         $habitation->id_type_habitation = $request->id_type_habitation;
-        $habitation->lodging_id = $request->lodging_id;
+        $habitation->id_lodging = $request->id_lodging;
         $habitation->number = $request->number;
         $habitation->adults = $request->adults;
         $habitation->children = $request->children;

@@ -32,8 +32,8 @@ return new class extends Migration
             $table->dateTime('checkout');
             $table->integer('adults')->nullable();
             $table->integer('children')->nullable();
-            $table->integer('price');
-            $table->boolean('status')->default(true);
+            $table->integer('price')->nullable();
+            $table->string('status', 20)->default('pendiente');
             $table->timestamps();
         });
     }
