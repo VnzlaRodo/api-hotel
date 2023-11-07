@@ -71,7 +71,7 @@ class ClientController extends Controller
          //avatar client
          if ($request->hasFile('avatar')){
             $file = $request->file('avatar');
-            $destinationPath = 'img/clients/';
+            $destinationPath = 'assets/images/clients/';
             $filename = time() . '-' . $file->getClientOriginalName();
             $uploadSuccess = $request->file('avatar')->move($destinationPath, $filename);
             $client->avatar = $destinationPath . $filename;
@@ -148,12 +148,14 @@ class ClientController extends Controller
      */
     public function update(Request $request, Client $client)
     {
-        //    
-        
+                
          //avatar client
          if ($request->hasFile('avatar')){
+
+            unlink(public_path($client->avatar));
+
             $file = $request->file('avatar');
-            $destinationPath = 'img/clients/';
+            $destinationPath = 'assets/images/clients/';
             $filename = time() . '-' . $file->getClientOriginalName();
             $uploadSuccess = $request->file('avatar')->move($destinationPath, $filename);
             $client->avatar = $destinationPath . $filename;
@@ -213,5 +215,18 @@ class ClientController extends Controller
         ];
 
         return response()->json($data);
+    }   
+
+    public function clientCedula(Request $request){
+
+        $clientTemp = Client::where('cedula' , $request->cedula)->get();
+        $client = $clientTemp[0];
+
+        $data = [
+            "message" => "Cliente no existe"
+        ];
+
+        if ( json_encode($client) != "[]" ) return response()->json($client, 200);
+        else return response()->json($data, 404);
     }
 }

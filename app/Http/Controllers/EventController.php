@@ -53,18 +53,17 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $event = new Event;
 
         //image service
         if ($request->hasFile('avatar')){
             $file = $request->file('avatar');
-            $destinationPath = 'images/services/events/';
+            $destinationPath = 'assets/images/events/';
             $filename = time() . '-' . $file->getClientOriginalName();
             $uploadSuccess = $request->file('avatar')->move($destinationPath, $filename);
             $event->avatar = $destinationPath . $filename;
         }
 
-        $event = new Event;
         $event->id_type_event = $request->id_type_event;
         $event->id_space = $request->id_space;
         $event->service_id = $request->service_id;
@@ -125,15 +124,22 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
-        //
+        //avatar eventos
+        if ($request->hasFile('avatar')){
+            $file = $request->file('avatar');
+            $destinationPath = 'assets/images/events/';
+            $filename = time() . '-' . $file->getClientOriginalName();
+            $uploadSuccess = $request->file('avatar')->move($destinationPath, $filename);
+            $event->avatar = $destinationPath . $filename;
+        }
+
         $event->id_type_event = $request->id_type_event;
         $event->id_space = $request->id_space;
         $event->service_id = $request->service_id;
         $event->name = $request->name;
         $event->date = $request->date;
         $event->price = $request->price;
-        $event->amount = $request->amount;
-        $event->avatar = $request->avatar;
+        $event->amount = $request->amount;        
         $event->save();
 
         $data = [

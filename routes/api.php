@@ -30,8 +30,12 @@ Route::get('typehabitations-public', [TypeHabitationController::class, 'index'])
 Route::get('typeservices-public', [TypeServiceController::class, 'index']);
 Route::get('events-public', [EventController::class, 'index']);
 Route::get('spaces-public', [SpaceController::class, 'index']);
+
 Route::post('clients-public', [ClientController::class, 'store']);
+Route::post('clients-public-update/{client}', [ClientController::class, 'update']);
+Route::post('clients-public-cedula', [ClientController::class, 'clientCedula']);
 Route::post('lodgings-public', [LodgingController::class, 'storeClient']);
+
 
 //Consulta de habitaciones
 Route::post('lodgings/forrange', [LodgingController::class, 'forRange']);
@@ -121,7 +125,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('spaces', [SpaceController::class, 'index']);
     Route::post('spaces', [SpaceController::class, 'store']);
     Route::get('spaces/{space}', [SpaceController::class, 'show']);
-    Route::put('spaces/{space}', [SpaceController::class, 'update']);
+    Route::post('spaces/{space}', [SpaceController::class, 'update']);
     Route::delete('spaces/{space}', [SpaceController::class, 'destroy']);
     
     //tickets

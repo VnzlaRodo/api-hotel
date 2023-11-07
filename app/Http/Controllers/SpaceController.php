@@ -56,11 +56,20 @@ class SpaceController extends Controller
 
          //image spaces
          if ($request->hasFile('images')){
-            $file = $request->file('images');
-            $destinationPath = 'img/spaces/';
-            $filename = time() . '-' . $file->getClientOriginalName();
-            $uploadSuccess = $request->file('images')->move($destinationPath, $filename);
-            $space->images = $destinationPath . $filename;
+
+            $files = $request->file('images');
+            $num = 0;
+            $filenames = [];
+            foreach ($files as $file) {
+                $num++;  
+                $exe = explode('.', $file->getClientOriginalName());
+                $destinationPath = 'assets/images/spaces/';
+                $filename = time() . '-' . $request->name . '-' . $num . '.' . $exe[1];
+                $uploadSuccess = $file->move($destinationPath, $filename);
+                $filenames[] = $destinationPath . $filename;
+            }
+            
+            $space->images = implode(',', $filenames);
         }
 
         $space->name = $request->name;
@@ -117,16 +126,31 @@ class SpaceController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, Space $space)
-    {
+    {        
         //
         
         //image spaces
         if ($request->hasFile('images')){
-            $file = $request->file('images');
-            $destinationPath = 'img/spaces/';
-            $filename = time() . '-' . $file->getClientOriginalName();
-            $uploadSuccess = $request->file('images')->move($destinationPath, $filename);
-            $space->images = $destinationPath . $filename;
+            
+            //Eliminando imagenes anteriores        
+            $oldfiles = explode("," , $space->images);
+            foreach ($oldfiles as $file) {
+                unlink(public_path($file));
+            }
+
+            $files = $request->file('images');
+            $num = 0;
+            $filenames = [];
+            foreach ($files as $file) {
+                $num++;  
+                $exe = explode('.', $file->getClientOriginalName());
+                $destinationPath = 'assets/images/spaces/';
+                $filename = time() . '-' . $request->name . '-' . $num . '.' . $exe[1];
+                $uploadSuccess = $file->move($destinationPath, $filename);
+                $filenames[] = $destinationPath . $filename;
+            }
+            
+            $space->images = implode(',', $filenames);
         }
 
         $space->name = $request->name;
